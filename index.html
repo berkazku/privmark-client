@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privmark — Privacy-First Watermarking</title>
+  <meta name="description" content="Embed per-recipient watermarks into images entirely in your browser. No server, no upload, no tracking." />
+
+  <!-- Preconnect for Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <link rel="stylesheet" href="./src/style.css" />
+</head>
+<body>
+
+<div class="app-wrapper">
+
+  <!-- ── Header ─────────────────────────────────────────────────────────── -->
+  <header>
+    <div class="logo-badge">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      </svg>
+      100% Client-Side · WASM Powered
+    </div>
+    <h1>Privmark</h1>
+    <p class="tagline">
+      Embed invisible, tamper-resistant watermarks into documents and images —
+      entirely in your browser. Nothing ever leaves your device.
+    </p>
+  </header>
+
+  <!-- ── Config Card ────────────────────────────────────────────────────── -->
+  <div class="card">
+
+    <div class="config-grid">
+      <div class="field">
+        <label for="recipient">Recipient / Label</label>
+        <input
+          id="recipient"
+          type="text"
+          placeholder="e.g. alice@example.com"
+          autocomplete="off"
+          spellcheck="false"
+        />
+      </div>
+
+      <div class="field">
+        <label for="strength">Watermark Strength</label>
+        <div class="strength-row">
+          <input
+            id="strength"
+            type="range"
+            min="0.04"
+            max="0.40"
+            step="0.01"
+            value="0.14"
+          />
+          <span class="strength-val" id="strength-val">14%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dropzone -->
+    <div class="dropzone" id="dropzone" role="button" tabindex="0" aria-label="Drop image or click to select">
+      <div class="dz-icon">🖼️</div>
+      <p class="dz-label">Drop a JPEG or PNG here</p>
+      <p class="dz-sub">or click to browse — max ~20 MB</p>
+      <input id="file-input" type="file" accept="image/jpeg,image/png,.jpg,.jpeg,.png" style="display:none" />
+    </div>
+
+    <!-- Action bar -->
+    <div class="actions">
+      <div style="display:flex;align-items:center;gap:0.5rem;flex:1">
+        <div id="progress-ring"></div>
+        <span id="status" data-state="idle">Loading WASM module…</span>
+      </div>
+      <a id="download-link" class="btn btn-secondary" href="#" download>
+        ↓ Download
+      </a>
+      <button id="process-btn" class="btn btn-primary">
+        Apply Watermark
+      </button>
+    </div>
+
+  </div><!-- /card -->
+
+  <!-- ── Preview ────────────────────────────────────────────────────────── -->
+  <div id="preview-section">
+    <img id="preview" alt="Watermarked preview" />
+  </div>
+
+  <!-- ── Feature chips ──────────────────────────────────────────────────── -->
+  <div class="feature-row">
+    <span class="chip"><span class="dot"></span>No server uploads</span>
+    <span class="chip"><span class="dot"></span>Crop-resistant tiling</span>
+    <span class="chip"><span class="dot"></span>Luminance-adaptive</span>
+    <span class="chip"><span class="dot"></span>Per-recipient unique</span>
+    <span class="chip"><span class="dot"></span>JPEG &amp; PNG</span>
+    <span class="chip"><span class="dot"></span>EXIF-aware</span>
+  </div>
+
+</div><!-- /app-wrapper -->
+
+<!-- ── Scripts ──────────────────────────────────────────────────────────── -->
+<script>
+  // Strength slider label sync
+  const slider = document.getElementById('strength');
+  const valLabel = document.getElementById('strength-val');
+  slider.addEventListener('input', () => {
+    valLabel.textContent = Math.round(Number.parseFloat(slider.value) * 100) + '%';
+  });
+
+  // Dropzone keyboard accessibility
+  document.getElementById('dropzone').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') document.getElementById('file-input').click();
+  });
+</script>
+<script src="./src/app.js" defer></script>
+
+</body>
+</html>
